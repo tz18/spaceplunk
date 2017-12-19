@@ -5,14 +5,13 @@ using UnityEngine;
 public class Attractor : MonoBehaviour {
 
     public static List<Attractor> attractors;
-    const float G = 6.674f;
-    const float distancescale = 1;
-    const float massscale = 1;
+    const double G = 6.67408E-2; //gravitational constant
     public Rigidbody2D rb;
+    public bool canBeAttracted=false;
 
     void FixedUpdate() {
         foreach (Attractor attractor in attractors) {
-            if (attractor != this) {
+            if (attractor != this /*&& attractor.canBeAttracted*/) {
                 Attract(attractor);
             }
         }
@@ -35,8 +34,8 @@ public class Attractor : MonoBehaviour {
         float distance = direction.magnitude;
         if (distance == 0) {
             return;
-        }
-        float forceMagnitude = G * (rb.mass * rbToAttract.mass / Mathf.Pow(distance,2));
+        } 
+        float forceMagnitude = (float)((G * (rb.mass * rbToAttract.mass) / Mathf.Pow(distance,2)));
         Vector2 force = direction.normalized * forceMagnitude;
 
         rbToAttract.AddForce(force);
