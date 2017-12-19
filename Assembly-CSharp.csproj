@@ -52,8 +52,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Attractor.cs" />
+     <Compile Include="Assets\Capturable.cs" />
      <Compile Include="Assets\GolfShoot.cs" />
+     <Compile Include="Assets\Munition.cs" />
      <Compile Include="Assets\README.cs" />
+     <Compile Include="Assets\ShootMans.cs" />
  <Reference Include="Facebook.Unity.Settings">
  <HintPath>D:/Documents/Unity Projects/spaceplunk/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>
