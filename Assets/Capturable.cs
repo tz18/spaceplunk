@@ -19,4 +19,19 @@ public class Capturable : MonoBehaviour
             res += resgrowrate;
         }
     }
+
+    public void landMans(float mans, int otherteam)
+    {
+        if (team == otherteam)
+        {
+            res += mans;
+        }
+        else {
+            res -= mans;
+            if (res < 0) {
+                team = otherteam;
+                res = -res;
+            }
+        }
+    }
 }

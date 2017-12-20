@@ -55,6 +55,7 @@ public class ShootMans : MonoBehaviour {
         else {
             GameObject shot=Instantiate(ammunition,rb.position - direction.normalized, Quaternion.identity); //todo fix this so it never spawns stuff in the planet
             shot.GetComponent<Munition>().res = mansloaded;
+            shot.GetComponent<Munition>().team = cap.team;
             Rigidbody2D shotrb = shot.GetComponent<Rigidbody2D>();
             shotrb.mass = mansloaded/100;
             float forcemagnitude = (direction.magnitude) * (direction.magnitude);            
