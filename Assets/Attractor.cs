@@ -11,7 +11,7 @@ public class Attractor : MonoBehaviour {
 
     void FixedUpdate() {
         foreach (Attractor attractor in attractors) {
-            if (attractor != this /*&& attractor.canBeAttracted*/) {
+            if (attractor != this && attractor.canBeAttracted) {
                 Attract(attractor);
             }
         }

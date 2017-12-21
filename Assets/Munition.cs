@@ -16,9 +16,15 @@ public class Munition : MonoBehaviour {
         Capturable cap = collision.gameObject.GetComponent<Capturable>();
         if (cap != null)
         {
-            Debug.Log("hi");
             cap.landMans(res, team);
             Destroy(gameObject);
         }
+        else {
+            Munition mun = collision.gameObject.GetComponent<Munition>();
+            if (mun == null) {
+                Destroy(gameObject);
+            }
+        }
+            
     }
 }

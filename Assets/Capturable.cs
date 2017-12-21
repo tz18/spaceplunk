@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Capturable : MonoBehaviour
 {
-
-
+    public static Color[] teamcolors = new Color[10] {Color.grey,Color.red,Color.blue,Color.green,Color.yellow, Color.magenta, Color.magenta,Color.cyan, Color.black, Color.black};
     public float rescap = 1000;
     public float resgrowrate = 0.01f;
     public float res = 100; //how much health/resources does it have
@@ -30,6 +29,10 @@ public class Capturable : MonoBehaviour
             res -= mans;
             if (res < 0) {
                 team = otherteam;
+                Renderer rend = GetComponent<Renderer>();
+                rend.material.SetColor("_Color", teamcolors[team]);
+                ShootMans shooter = GetComponent<ShootMans>();
+                shooter.canShoot = true;
                 res = -res;
             }
         }
