@@ -15,12 +15,13 @@ public class ShootMans : MonoBehaviour {
     const float linez = 10;
     public float mansloaded; //how many mans are suited up to shoot
     public float manstoload; //how many mans are you about to load
-    public float velocitytoshoot; //how fast mans will be shot
-    public bool canShoot=false;
+    public Vector2 velocitytoshoot; //how fast mans will be shot
+    public bool canShoot = false;
+    public int lengthofprediction = 100; //BAD: constant should be moved to top
 
     // Use this for initialization
-    void Start () {
-        rb = gameObject.GetComponent<Rigidbody2D> ();
+    void Start() {
+        rb = gameObject.GetComponent<Rigidbody2D>();
         lr = gameObject.GetComponent<LineRenderer>();
         cap = gameObject.GetComponent<Capturable>();
         shooterradius = gameObject.GetComponent<CircleCollider2D>().radius;
@@ -29,7 +30,7 @@ public class ShootMans : MonoBehaviour {
         }
         mansloaded = 0;
         manstoload = 0;
-        velocitytoshoot = 0;
+        velocitytoshoot = new Vector2 (0,0);
     }
     void OnMouseDown()
     {
@@ -47,16 +48,17 @@ public class ShootMans : MonoBehaviour {
         Vector3 dragCurrent = Input.mousePosition;
         dragCurrent.z = linez;
         dragCurrent = Camera.main.ScreenToWorldPoint(dragCurrent);
-        lr.SetPosition(0, dragBeginning);
-        lr.SetPosition(1, dragCurrent);
         Vector2 direction = dragCurrent - dragBeginning;
         if (mansloaded <= 0)
         {
+            lr.positionCount = 2;
+            lr.SetPosition(0, dragBeginning);
+            lr.SetPosition(1, dragCurrent);
             manstoload = Mathf.Min(direction.magnitude * direction.magnitude, cap.res);
         }
         if (mansloaded > 0)
         {
-            velocitytoshoot = direction.magnitude;
+            velocitytoshoot = -direction;
         }
     }
 
@@ -69,9 +71,30 @@ public class ShootMans : MonoBehaviour {
         }
         if (mansloaded > 0 && isDrag) {
             Rect labelbox = new Rect(Camera.main.WorldToScreenPoint(rb.position), new Vector2(100, 20));
-            GUI.Label(labelbox, velocitytoshoot.ToString());
+            GUI.Label(labelbox, velocitytoshoot.magnitude.ToString());
+            lr.positionCount=lengthofprediction;
+            int i = 0;
+            foreach (Vector2 point in PredictPath(lengthofprediction)){
+                lr.SetPosition(i, point);
+                i++;
+            }
         }
 
+    }
+    List<Vector2> PredictPath(int numberofpoints) {
+        List<Vector2> points = new List<Vector2>();
+        Vector2 position = rb.position + (velocitytoshoot.normalized * shooterradius * 2);
+        Vector2 velocity = velocitytoshoot;
+        Vector2 acceleration = new Vector2(0,0);
+        float dt = 0.01f;
+        for (int i = 0; i < numberofpoints; i++)
+        {
+            points.Add(position);
+            position += velocity*dt;
+            velocity += acceleration * dt;
+            acceleration = Attractor.FieldAtPoint(position);
+        }
+        return points;
     }
     void OnMouseUp()
     {
@@ -97,7 +120,7 @@ public class ShootMans : MonoBehaviour {
             shotrb.mass = mansloaded/100;
             shotrb.velocity= -direction;
             mansloaded = 0;
-            velocitytoshoot = 0;
+            velocitytoshoot = new Vector2(0,0);
         }
         lr.SetPosition(0, new Vector3(0, 0, 0));
         lr.SetPosition(1, new Vector3(0, 0, 0));
