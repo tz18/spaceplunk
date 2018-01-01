@@ -83,16 +83,22 @@ public class ShootMans : MonoBehaviour {
     }
     List<Vector2> PredictPath(int numberofpoints) {
         List<Vector2> points = new List<Vector2>();
-        Vector2 position = rb.position + (velocitytoshoot.normalized * shooterradius * 2);
-        Vector2 velocity = velocitytoshoot;
-        Vector2 acceleration = new Vector2(0,0);
-        float dt = 0.01f;
-        for (int i = 0; i < numberofpoints; i++)
+        Vector2 lastposition = rb.position + (velocitytoshoot.normalized * shooterradius * 2);
+        float dt = 0.03f;
+        points.Add(lastposition);
+        
+        Vector2 acceleration = Attractor.FieldAtPoint(lastposition);
+        Vector2 position = lastposition + velocitytoshoot * dt + (0.5f * acceleration * Mathf.Pow(dt,2));
+        points.Add(position);
+
+        Vector2 nextposition = new Vector2(0, 0);
+        for (int i = 2; i < numberofpoints; i++)
         {
-            points.Add(position);
-            position += velocity*dt;
-            velocity += acceleration * dt;
             acceleration = Attractor.FieldAtPoint(position);
+            nextposition = 2 * position - lastposition + acceleration * Mathf.Pow(dt, 2);
+            points.Add(nextposition);
+            lastposition = position;
+            position = nextposition;
         }
         return points;
     }
