@@ -22,8 +22,4 @@ public class PauseButtonScript : MonoBehaviour {
             Time.timeScale = 1.0F; //Otherwise, toggle back to full speed
     }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

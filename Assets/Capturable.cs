@@ -11,7 +11,7 @@ public class Capturable : MonoBehaviour
     public int team = 0; //neutral is 0, player 1 is 1, player 2 is 2 etc.
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (team > 0 && res < rescap)
         {

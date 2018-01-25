@@ -35,9 +35,9 @@ public class ShootMans : MonoBehaviour {
     void OnMouseDown()
     {
         if (!canShoot) return;
-        dragBeginning = Input.mousePosition;
+        dragBeginning = rb.position;
         dragBeginning.z = linez;
-        dragBeginning = Camera.main.ScreenToWorldPoint(dragBeginning);
+        //dragBeginning = Camera.main.ScreenToWorldPoint(dragBeginning);
         isDrag = false;
     }
     void OnMouseDrag()
